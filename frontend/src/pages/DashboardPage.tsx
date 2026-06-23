@@ -368,6 +368,13 @@ export const DashboardPage: React.FC = () => {
                   </div>
                 </div>
               )}
+              {/* Helping Point Banner */}
+              {activeTab === "dashboard" && (
+                <div className="mb-3 py-2 px-4 bg-primary/5 text-primary border border-primary/10 rounded-xl flex items-center gap-2.5 text-body-md shadow-sm animate-fade-in">
+                  <span className="material-symbols-outlined text-[18px] text-primary">info</span>
+                  <span className="font-medium">Select a student from the list below to view their analytics trends.</span>
+                </div>
+              )}
 
               {/* Table Card */}
               <div ref={studentTableRef} className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
@@ -375,7 +382,9 @@ export const DashboardPage: React.FC = () => {
                   <table className="w-full text-left border-collapse">
                     <thead className="bg-surface-container-low border-b border-outline-variant">
                       <tr>
-                        <th className="p-4 w-12"><input type="checkbox" className="rounded border-outline-variant text-primary focus:ring-primary" /></th>
+                        {activeTab === "dashboard" && (
+                          <th className="p-4 w-12"><input type="checkbox" className="rounded border-outline-variant text-primary focus:ring-primary" /></th>
+                        )}
                         <th className="p-4 font-label-sm text-label-sm uppercase text-on-surface-variant">Name</th>
                         <th className="p-4 font-label-sm text-label-sm uppercase text-on-surface-variant">Age</th>
                         <th className="p-4 font-label-sm text-label-sm uppercase text-on-surface-variant">Class</th>
@@ -391,7 +400,9 @@ export const DashboardPage: React.FC = () => {
                         /* Skeleton UI for Loading State */
                         Array.from({ length: 5 }).map((_, idx) => (
                           <tr key={idx} className="animate-pulse">
-                            <td className="p-4"><div className="h-4 w-4 bg-outline-variant/30 rounded" /></td>
+                            {activeTab === "dashboard" && (
+                              <td className="p-4"><div className="h-4 w-4 bg-outline-variant/30 rounded" /></td>
+                            )}
                             <td className="p-4">
                               <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-full bg-outline-variant/30" />
@@ -410,7 +421,7 @@ export const DashboardPage: React.FC = () => {
                       ) : students.length === 0 ? (
                         /* Empty State */
                         <tr>
-                          <td colSpan={9} className="p-12 text-center">
+                          <td colSpan={activeTab === "dashboard" ? 9 : 8} className="p-12 text-center">
                             <div className="flex flex-col items-center justify-center text-on-surface-variant">
                               <span className="material-symbols-outlined text-[48px] opacity-40 mb-3">search_off</span>
                               <p className="font-headline-sm text-[16px] font-bold">No students found</p>
@@ -425,19 +436,25 @@ export const DashboardPage: React.FC = () => {
                           return (
                             <tr 
                               key={student.id} 
-                              onClick={() => handleSelectStudent(student)}
+                              onClick={() => {
+                                if (activeTab === "dashboard") {
+                                  handleSelectStudent(student);
+                                }
+                              }}
                               className={`group cursor-pointer transition-colors ${
-                                isSelected ? "active-row" : "hover:bg-surface-container-low"
+                                activeTab === "dashboard" && isSelected ? "active-row" : "hover:bg-surface-container-low"
                               }`}
                             >
-                              <td className="p-4" onClick={(e) => e.stopPropagation()}>
-                                <input 
-                                  type="checkbox" 
-                                  checked={!!isSelected}
-                                  onChange={() => handleSelectStudent(student)}
-                                  className="rounded border-outline-variant text-primary focus:ring-primary" 
-                                />
-                              </td>
+                              {activeTab === "dashboard" && (
+                                <td className="p-4" onClick={(e) => e.stopPropagation()}>
+                                  <input 
+                                    type="checkbox" 
+                                    checked={!!isSelected}
+                                    onChange={() => handleSelectStudent(student)}
+                                    className="rounded border-outline-variant text-primary focus:ring-primary" 
+                                  />
+                                </td>
+                              )}
                               <td className="p-4">
                                 <div className="flex items-center gap-3">
                                   <div className="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-[12px]">
@@ -502,7 +519,7 @@ export const DashboardPage: React.FC = () => {
                 
                 {/* Pagination footer */}
                 {totalPages > 1 && (
-                  <div className="p-4 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+                  <div className="py-2.5 px-4 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
                     <span className="font-label-md text-label-md text-on-surface-variant">
                       Showing {(page - 1) * 10 + 1}-{Math.min(page * 10, total)} of {total} students
                     </span>
