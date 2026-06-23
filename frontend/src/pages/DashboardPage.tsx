@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useStudents } from "../hooks/useStudents";
 import { useAnalytics } from "../hooks/useAnalytics";
@@ -50,6 +50,23 @@ export const DashboardPage: React.FC = () => {
   const { analyticsData, setSelectedStudentId, isLoading: isAnalyticsLoading } = useAnalytics();
   const [studentToDelete, setStudentToDelete] = useState<any>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<"dashboard" | "students">(
+    location.hash === "#students" ? "students" : "dashboard"
+  );
+  const studentTableRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (location.hash === "#students") {
+      setActiveTab("students");
+      setTimeout(() => {
+        studentTableRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    } else {
+      setActiveTab("dashboard");
+    }
+  }, [location.hash]);
 
   // Synchronize first loaded student as selected
   useEffect(() => {
@@ -154,15 +171,31 @@ export const DashboardPage: React.FC = () => {
           </div>
           <nav className="flex flex-col gap-1">
             <button 
-              onClick={() => navigate("/")}
-              className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-primary bg-surface-container font-bold transition-all active:scale-95 duration-100"
+              onClick={() => {
+                setActiveTab("dashboard");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                navigate("/");
+              }}
+              className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg transition-all active:scale-95 duration-100 ${
+                activeTab === "dashboard"
+                  ? "text-primary bg-surface-container font-bold"
+                  : "text-on-surface-variant hover:text-primary hover:bg-surface-container"
+              }`}
             >
               <span className="material-symbols-outlined">dashboard</span>
               <span className="font-label-md text-label-md">Dashboard</span>
             </button>
             <button 
-              onClick={() => navigate("/")}
-              className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
+              onClick={() => {
+                setActiveTab("students");
+                navigate("/#students");
+                studentTableRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg transition-all active:scale-95 duration-100 ${
+                activeTab === "students"
+                  ? "text-primary bg-surface-container font-bold"
+                  : "text-on-surface-variant hover:text-primary hover:bg-surface-container"
+              }`}
             >
               <span className="material-symbols-outlined">group</span>
               <span className="font-label-md text-label-md">Student Management</span>
@@ -293,7 +326,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* Table Card */}
-              <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
+              <div ref={studentTableRef} className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead className="bg-surface-container-low border-b border-outline-variant">

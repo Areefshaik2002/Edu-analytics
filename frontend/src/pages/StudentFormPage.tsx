@@ -122,7 +122,7 @@ export const StudentFormPage: React.FC = () => {
             Dashboard
           </button>
           <button 
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/#students")}
             className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-primary font-bold bg-surface-container font-label-md text-label-md active:scale-95 duration-100"
           >
             <span className="material-symbols-outlined">group</span>
