@@ -196,7 +196,6 @@ export const DashboardPage: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-headline-sm text-[18px] font-bold text-primary">EduAnalytics</span>
-              <span className="font-label-md text-[10px] text-on-surface-variant uppercase tracking-wider">SaaS Platform</span>
             </div>
           </div>
           <nav className="flex flex-col gap-1">
@@ -561,35 +560,14 @@ export const DashboardPage: React.FC = () => {
                   >
                     <span className="material-symbols-outlined text-[20px]">close</span>
                   </button>
-                  <div className="flex flex-col items-center text-center">
-                    <div className="relative mb-4">
-                      <img 
-                        className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover" 
-                        alt={selectedStudent.name}
-                        src={selectedStudent.name === "Arjun Kumar" 
-                          ? "https://lh3.googleusercontent.com/aida-public/AB6AXuCvV808GDfSmFa68p2w7m8DYvaLaP3ANvlydZrPk33-ZXIhy1Wnh7UpIe-iRvVBxiFmTxBbdJfzDqERTkEJCSRAtw0mO8D3cuBMwvjJa66oSlhdUVWNW_fSIm6hPOIrvkCNBjrdb5q4MHqpMiub6Ir7l04MckWDWOzjyE_lK6a5H1S2f-d_XR_M6Q9jzKPPnICBhSLRIKtfmCgE1T3CqRGeIO1C8Kq4euBZRlZ4twK25H5XBwotFn1j_PB0Y5RtaEbUZHMoHdbZS740"
-                          : "https://lh3.googleusercontent.com/aida/AP1WRLsxCEyn5AGClRWJEvucOoSxslj8RzQ-LL0JNYWSFZ0-rAoewvshu195RsMiPtrBxERsvDngMQ_iC2_7_w-QRrDl0sc31i5oEMTgxgIMbbPxnp7wx252j32fJl-gweKSlJGj5IE2qw9cNImcQ9vbT1Mv_n4j3w9ieljiF3kUo33h_JhGl2KSSGftdg-v9SSEddB_W28Z8FCRsWgt0mTr3gmzCsUaQHLw0CIj-1ObX0HgFjope42oC68Vwpta"
-                        }
-                      />
-                      <div className="absolute bottom-0 right-0 w-6 h-6 bg-secondary border-2 border-white rounded-full flex items-center justify-center text-white">
-                        <span className="material-symbols-outlined text-[14px]">star</span>
-                      </div>
+                  <div className="flex flex-col items-center text-center py-4">
+                    <div className="w-20 h-20 rounded-full border-4 border-white shadow-md bg-surface-container flex items-center justify-center text-on-surface-variant mb-4">
+                      <span className="material-symbols-outlined text-[40px] text-primary">person</span>
                     </div>
                     <h2 className="font-headline-sm text-[18px] font-bold text-on-surface">{selectedStudent.name}</h2>
-                    <div className="flex gap-2 mt-1 justify-center">
+                    <div className="flex gap-2 mt-2 justify-center">
                       <span className="font-label-md text-label-md bg-surface-container px-3 py-1 rounded-full text-on-surface-variant">Age: {selectedStudent.age}</span>
                       <span className="font-label-md text-label-md bg-surface-container px-3 py-1 rounded-full text-on-surface-variant">Class: {selectedStudent.currentClass}</span>
-                    </div>
-                    <div className="mt-4 flex gap-4 w-full justify-center">
-                      <div className="flex flex-col">
-                        <span className="font-label-sm text-[10px] text-on-surface-variant uppercase">Overall Rank</span>
-                        <span className="font-headline-sm text-headline-sm text-primary font-bold">#04</span>
-                      </div>
-                      <div className="w-[1px] bg-outline-variant h-10"></div>
-                      <div className="flex flex-col">
-                        <span className="font-label-sm text-[10px] text-on-surface-variant uppercase">Attendance</span>
-                        <span className="font-headline-sm text-headline-sm text-secondary font-bold">98%</span>
-                      </div>
                     </div>
                   </div>
                 </div>

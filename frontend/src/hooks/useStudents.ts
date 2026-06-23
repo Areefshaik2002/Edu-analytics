@@ -18,8 +18,8 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
 
   const lastFetched = useRef({ page: 0, search: "" });
 
-  const fetchStudents = useCallback(async (targetPage = page, query = search) => {
-    if (lastFetched.current.page === targetPage && lastFetched.current.search === query) {
+  const fetchStudents = useCallback(async (targetPage = page, query = search, force = false) => {
+    if (!force && lastFetched.current.page === targetPage && lastFetched.current.search === query) {
       return;
     }
     setIsLoading(true);
@@ -73,7 +73,7 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
     try {
       await StudentService.createStudent(data);
       setSuccessMessage("Student successfully registered!");
-      fetchStudents(1, search);
+      fetchStudents(1, search, true);
       return true;
     } catch (e: any) {
       setError(e.response?.data?.message || "Failed to register student.");
@@ -89,7 +89,7 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
     try {
       await StudentService.updateStudent(id, data);
       setSuccessMessage("Student records successfully updated!");
-      fetchStudents(page, search);
+      fetchStudents(page, search, true);
       return true;
     } catch (e: any) {
       setError(e.response?.data?.message || "Failed to update student records.");
@@ -107,7 +107,7 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
       setSuccessMessage("Student record deleted successfully.");
       const isLastItemOnPage = students.length === 1;
       const targetPage = isLastItemOnPage && page > 1 ? page - 1 : page;
-      fetchStudents(targetPage, search);
+      fetchStudents(targetPage, search, true);
       return true;
     } catch (e: any) {
       setError(e.response?.data?.message || "Failed to delete student record.");

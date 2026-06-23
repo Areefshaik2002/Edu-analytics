@@ -111,7 +111,6 @@ export const StudentFormPage: React.FC = () => {
           </div>
           <div>
             <h1 className="font-headline-sm text-[18px] font-bold text-primary leading-tight">EduAnalytics</h1>
-            <p className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">SaaS Platform</p>
           </div>
         </div>
         <nav className="flex-1 space-y-1">
