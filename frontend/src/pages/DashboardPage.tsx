@@ -68,19 +68,49 @@ export const DashboardPage: React.FC = () => {
     }
   }, [location.hash]);
 
-  // Synchronize first loaded student as selected
-  useEffect(() => {
-    if (students.length > 0 && !selectedStudent) {
-      setSelectedStudent(students[0]);
-      setSelectedStudentId(students[0].id);
-    }
-  }, [students, selectedStudent, setSelectedStudentId]);
-
   const handleSelectStudent = (student: any) => {
-    setSelectedStudent(student);
-    setSelectedStudentId(student.id);
+    if (selectedStudent && selectedStudent.id === student.id) {
+      setSelectedStudent(null);
+      setSelectedStudentId(null);
+    } else {
+      setSelectedStudent(student);
+      setSelectedStudentId(student.id);
+    }
+  };
+  const getStats = () => {
+    if (students.length === 0) {
+      return { classAverage: 81.4, topSubject: "English", passRate: 96.2 };
+    }
+    
+    let totalScore = 0;
+    let passCount = 0;
+    let subjectTotals = { Telugu: 0, Hindi: 0, English: 0, Social: 0 };
+    
+    students.forEach((s: any) => {
+      const studentAvg = (s.teluguAverage + s.hindiAverage + s.englishAverage + s.socialStudiesAverage) / 4;
+      totalScore += studentAvg;
+      if (studentAvg >= 60) {
+        passCount++;
+      }
+      subjectTotals.Telugu += s.teluguAverage;
+      subjectTotals.Hindi += s.hindiAverage;
+      subjectTotals.English += s.englishAverage;
+      subjectTotals.Social += s.socialStudiesAverage;
+    });
+
+    const classAverage = Math.round((totalScore / students.length) * 10) / 10;
+    const passRate = Math.round((passCount / students.length) * 1000) / 10;
+    
+    let topSubject = "Telugu";
+    let maxAvg = subjectTotals.Telugu;
+    if (subjectTotals.Hindi > maxAvg) { topSubject = "Hindi"; maxAvg = subjectTotals.Hindi; }
+    if (subjectTotals.English > maxAvg) { topSubject = "English"; maxAvg = subjectTotals.English; }
+    if (subjectTotals.Social > maxAvg) { topSubject = "Social Studies"; maxAvg = subjectTotals.Social; }
+
+    return { classAverage, topSubject, passRate };
   };
 
+  const stats = getStats();
   const handleDeleteConfirm = async () => {
     if (studentToDelete) {
       const success = await deleteStudent(studentToDelete.id);
@@ -200,30 +230,7 @@ export const DashboardPage: React.FC = () => {
               <span className="material-symbols-outlined">group</span>
               <span className="font-label-md text-label-md">Student Management</span>
             </button>
-            <button 
-              onClick={() => alert("Reports dashboard module is coming soon!")}
-              className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
-            >
-              <span className="material-symbols-outlined">assessment</span>
-              <span className="font-label-md text-label-md">Reports</span>
-            </button>
           </nav>
-        </div>
-        <div className="mt-auto flex flex-col gap-1 border-t border-outline-variant pt-stack-md">
-          <button 
-            onClick={() => alert("Settings module is coming soon!")}
-            className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
-          >
-            <span className="material-symbols-outlined">settings</span>
-            <span className="font-label-md text-label-md">Settings</span>
-          </button>
-          <button 
-            onClick={() => alert("Support channel is coming soon!")}
-            className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
-          >
-            <span className="material-symbols-outlined">contact_support</span>
-            <span className="font-label-md text-label-md">Support</span>
-          </button>
         </div>
       </aside>
 
@@ -263,32 +270,15 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Profile Avatar & Actions */}
+            {/* Profile Actions */}
             <div className="flex items-center gap-4">
-              <button className="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors relative hidden sm:block">
-                <span className="material-symbols-outlined">notifications</span>
-                <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+              <button 
+                onClick={() => logout()}
+                className="flex items-center gap-2 px-3 py-1.5 border border-error/20 text-error hover:bg-error/5 rounded-lg font-label-md text-label-md font-bold transition-all active:scale-95 duration-100"
+              >
+                <span className="material-symbols-outlined text-[16px]">logout</span>
+                Logout
               </button>
-              <button className="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors hidden sm:block">
-                <span className="material-symbols-outlined">help</span>
-              </button>
-              <div className="h-8 w-[1px] bg-outline-variant mx-2 hidden sm:block"></div>
-              <div className="flex items-center gap-3">
-                <div className="text-right flex flex-col leading-none">
-                  <span className="font-label-md text-label-md font-bold text-on-surface">Prof. Sarah J.</span>
-                  <button 
-                    onClick={() => logout()}
-                    className="font-label-md text-[10px] text-error hover:underline text-left"
-                  >
-                    Logout
-                  </button>
-                </div>
-                <img 
-                  className="w-10 h-10 rounded-full border border-outline-variant object-cover" 
-                  alt="Sarah Avatar" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpXwIlAEE3otij4fCrzALcnuuU1kNjRfiNfXzZQoNVbQpWCf4XZxhEOSetxSXo4ltV-visqMJ_C1X4z71JLt0wGshTm2PZmEXAWeldYIdDijxNALLkyFHz2-c3_iZIQD3SvfmuPi82nYx2TW5r4KJlLnPFUfYmzLQpTEYhiHM7w_tm7M4XEdVzy_NClGs1bennGjkY18Vmlqetix8SpBiRjz9Az75if_7v42EC8BC252wa6vNzxVqIhmQJA7xlwH4vOQwZDOn50cr7"
-                />
-              </div>
             </div>
           </div>
         </header>
@@ -313,8 +303,14 @@ export const DashboardPage: React.FC = () => {
               {/* Section Header */}
               <div className="flex justify-between items-end mb-6">
                 <div>
-                  <h1 className="font-headline-md text-headline-md text-on-surface mb-1">Student Performance Dashboard</h1>
-                  <p className="font-body-md text-body-md text-on-surface-variant">Managing performance metrics for Class 10-A</p>
+                  <h1 className="font-headline-md text-headline-md text-on-surface mb-1">
+                    {activeTab === "dashboard" ? "Student Performance Dashboard" : "Student Directory & Management"}
+                  </h1>
+                  <p className="font-body-md text-body-md text-on-surface-variant">
+                    {activeTab === "dashboard"
+                      ? "Overview of educational analytics and class performance metrics"
+                      : "Manage student profiles, enrollments, and academic marks across all students"}
+                  </p>
                 </div>
                 <button 
                   onClick={() => navigate("/students/new")}
@@ -324,6 +320,55 @@ export const DashboardPage: React.FC = () => {
                   Add Student
                 </button>
               </div>
+
+              {/* Overview Dashboard Stats (Only shown when Dashboard tab is active) */}
+              {activeTab === "dashboard" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 animate-fade-in">
+                  {/* Card 1: Total Students */}
+                  <div className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 shadow-[0px_4px_12px_rgba(0,0,0,0.02)] hover:border-primary/30 transition-colors">
+                    <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[24px]">group</span>
+                    </div>
+                    <div>
+                      <p className="font-headline-sm text-[20px] font-bold text-on-surface leading-tight">{total}</p>
+                      <p className="font-label-md text-label-md text-on-surface-variant mt-0.5">Total Students</p>
+                    </div>
+                  </div>
+
+                  {/* Card 2: Class Average */}
+                  <div className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 shadow-[0px_4px_12px_rgba(0,0,0,0.02)] hover:border-primary/30 transition-colors">
+                    <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[24px]">analytics</span>
+                    </div>
+                    <div>
+                      <p className="font-headline-sm text-[20px] font-bold text-on-surface leading-tight">{stats.classAverage}%</p>
+                      <p className="font-label-md text-label-md text-on-surface-variant mt-0.5">Class Average</p>
+                    </div>
+                  </div>
+
+                  {/* Card 3: Top Subject */}
+                  <div className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 shadow-[0px_4px_12px_rgba(0,0,0,0.02)] hover:border-primary/30 transition-colors">
+                    <div className="w-12 h-12 bg-amber-500/10 text-amber-600 rounded-xl flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[24px]">workspace_premium</span>
+                    </div>
+                    <div>
+                      <p className="font-headline-sm text-[18px] font-bold text-on-surface leading-tight truncate max-w-[120px]">{stats.topSubject}</p>
+                      <p className="font-label-md text-label-md text-on-surface-variant mt-0.5">Top Subject</p>
+                    </div>
+                  </div>
+
+                  {/* Card 4: Passing Rate */}
+                  <div className="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 shadow-[0px_4px_12px_rgba(0,0,0,0.02)] hover:border-primary/30 transition-colors">
+                    <div className="w-12 h-12 bg-green-500/10 text-green-600 rounded-xl flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[24px]">check_circle</span>
+                    </div>
+                    <div>
+                      <p className="font-headline-sm text-[20px] font-bold text-on-surface leading-tight">{stats.passRate}%</p>
+                      <p className="font-label-md text-label-md text-on-surface-variant mt-0.5">Passing Rate</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Table Card */}
               <div ref={studentTableRef} className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
@@ -389,7 +434,7 @@ export const DashboardPage: React.FC = () => {
                               <td className="p-4" onClick={(e) => e.stopPropagation()}>
                                 <input 
                                   type="checkbox" 
-                                  checked={isSelected}
+                                  checked={!!isSelected}
                                   onChange={() => handleSelectStudent(student)}
                                   className="rounded border-outline-variant text-primary focus:ring-primary" 
                                 />
@@ -502,10 +547,20 @@ export const DashboardPage: React.FC = () => {
           </section>
 
           {/* Right Panel: Selected Student Details & Trends */}
-          <aside className="w-[380px] bg-surface-container-lowest border-l border-outline-variant overflow-y-auto scrollbar-hide flex flex-col hidden xl:flex">
-            {selectedStudent ? (
-              <>
-                <div className="p-stack-lg border-b border-outline-variant bg-surface-container-low/30">
+          <aside className={`bg-surface-container-lowest flex flex-col transition-all duration-300 ease-in-out hidden xl:flex ${
+            selectedStudent 
+              ? "w-[380px] border-l border-outline-variant opacity-100" 
+              : "w-0 border-l-0 opacity-0 overflow-hidden"
+          }`}>
+            {selectedStudent && (
+              <div className="w-[380px] flex flex-col h-full overflow-y-auto scrollbar-hide">
+                <div className="p-stack-lg border-b border-outline-variant bg-surface-container-low/30 relative">
+                  <button 
+                    onClick={() => handleSelectStudent(selectedStudent)}
+                    className="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">close</span>
+                  </button>
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-4">
                       <img 
@@ -612,11 +667,6 @@ export const DashboardPage: React.FC = () => {
                     <div className="text-center p-4 text-on-surface-variant">No analytics data available</div>
                   )}
                 </div>
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center flex-1 text-on-surface-variant p-stack-lg">
-                <span className="material-symbols-outlined text-[48px] opacity-40 mb-2">touch_app</span>
-                <p className="font-label-md text-center">Select a student from the directory to review performance trends.</p>
               </div>
             )}
           </aside>

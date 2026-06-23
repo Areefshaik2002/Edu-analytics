@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { StudentService } from "../services/studentService";
 import type { Student, StudentDetail } from "../types";
 
@@ -16,7 +16,12 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
   const [selectedStudentDetail, setSelectedStudentDetail] = useState<StudentDetail | null>(null);
   const [isFormLoading, setIsFormLoading] = useState(false);
 
+  const lastFetched = useRef({ page: 0, search: "" });
+
   const fetchStudents = useCallback(async (targetPage = page, query = search) => {
+    if (lastFetched.current.page === targetPage && lastFetched.current.search === query) {
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -25,6 +30,7 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
       setTotal(data.total);
       setPage(data.page);
       setTotalPages(data.totalPages);
+      lastFetched.current = { page: data.page, search: query };
     } catch (e: any) {
       setError(e.response?.data?.message || "Failed to retrieve student records.");
     } finally {
@@ -32,8 +38,15 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
     }
   }, [page, search, initialLimit]);
 
+  // Fetch when page changes
+  useEffect(() => {
+    fetchStudents(page, search);
+  }, [page]);
+
+  // Watch search query changes (debounced)
   useEffect(() => {
     const timer = setTimeout(() => {
+      setPage(1);
       fetchStudents(1, search);
     }, 300); // debounce search query
     return () => clearTimeout(timer);

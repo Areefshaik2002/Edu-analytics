@@ -54,7 +54,8 @@ export const StudentFormPage: React.FC = () => {
   }, [id, isEditMode]);
 
   const handleMarkChange = (subject: string, month: string, value: string) => {
-    let score = parseInt(value) || 0;
+    let score = parseFloat(value);
+    if (isNaN(score)) score = 0;
     if (score > 100) score = 100;
     if (score < 0) score = 0;
 
@@ -128,30 +129,7 @@ export const StudentFormPage: React.FC = () => {
             <span className="material-symbols-outlined">group</span>
             Student Management
           </button>
-          <button 
-            onClick={() => alert("Reports dashboard module is coming soon!")}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md active:scale-95 duration-100"
-          >
-            <span className="material-symbols-outlined">assessment</span>
-            Reports
-          </button>
         </nav>
-        <div className="mt-auto pt-4 space-y-1 border-t border-outline-variant">
-          <button 
-            onClick={() => alert("Settings module is coming soon!")}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md"
-          >
-            <span className="material-symbols-outlined">settings</span>
-            Settings
-          </button>
-          <button 
-            onClick={() => alert("Support channel is coming soon!")}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md"
-          >
-            <span className="material-symbols-outlined">contact_support</span>
-            Support
-          </button>
-        </div>
       </aside>
 
       {/* Main Form Area Wrapper */}
@@ -167,22 +145,13 @@ export const StudentFormPage: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <button className="p-2 rounded-full hover:bg-surface-container-low transition-colors relative">
-                <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
-                <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+              <button 
+                onClick={() => logout()}
+                className="flex items-center gap-2 px-3 py-1.5 border border-error/20 text-error hover:bg-error/5 rounded-lg font-label-md text-label-md font-bold transition-all active:scale-95 duration-100"
+              >
+                <span className="material-symbols-outlined text-[16px]">logout</span>
+                Logout
               </button>
-              <button className="p-2 rounded-full hover:bg-surface-container-low transition-colors">
-                <span className="material-symbols-outlined text-on-surface-variant">help</span>
-              </button>
-              <div className="h-8 w-px bg-outline-variant mx-1"></div>
-              <div className="flex items-center gap-3 pl-2">
-                <div className="text-right">
-                  <p className="font-label-md text-label-md text-on-surface leading-none">Prof. Rajesh Kumar</p>
-                  <p className="text-[10px] text-on-surface-variant font-medium">Administrator</p>
-                </div>
-                <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" alt="Rajesh Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6ROX8DbUja_k7W9MrQNapE7y7O1yHJmY_etnsfT6YsARRsFy3HrF7U1aregQpUa71zqti2rdk-tHTGsxFgVhtUmGx6B5C0SWf-NeSWT8fdhlm5_73og9B2MnzAUf7Rc6OCuiUmVjG0-1_nKKLf_6lsWqHUitM6yjIBzMQHyGy87mxolCfr20bXk7Dt0SnO7YyBXnmEZUzJvBL2y7RbhWWB_bvYqaqPC96LBUH5Zt81bYbEfqv46L0ElVOHZSx8qbsbjQmoy38TIIM"/>
-                <button onClick={() => logout()} className="text-primary font-bold text-body-md hover:underline decoration-2 underline-offset-4">Logout</button>
-              </div>
             </div>
           </div>
         </header>
@@ -357,6 +326,7 @@ export const StudentFormPage: React.FC = () => {
                               <td key={mon} className="px-2 py-3">
                                 <input 
                                   type="number"
+                                  step="any"
                                   className="grid-input w-full text-center py-2 px-1 bg-surface border border-outline-variant/50 rounded-lg font-label-md focus:outline-none transition-all"
                                   value={marks[sub]?.[mon] ?? ""}
                                   onChange={(e) => handleMarkChange(sub, mon, e.target.value)}
