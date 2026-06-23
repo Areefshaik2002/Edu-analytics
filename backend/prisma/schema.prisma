@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Student {
+  id           Int      @id @default(autoincrement())
+  name         String
+  age          Int
+  currentClass String   @map("current_class")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  marks        Mark[]
+
+  @@map("students")
+}
+
+model Subject {
+  id          Int    @id @default(autoincrement())
+  subjectName String @unique @map("subject_name")
+  marks       Mark[]
+
+  @@map("subjects")
+}
+
+model Month {
+  id        Int    @id @default(autoincrement())
+  monthName String @unique @map("month_name")
+  marks     Mark[]
+
+  @@map("months")
+}
+
+model Mark {
+  id        Int     @id @default(autoincrement())
+  studentId Int     @map("student_id")
+  subjectId Int     @map("subject_id")
+  monthId   Int     @map("month_id")
+  marks     Float
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+  month     Month   @relation(fields: [monthId], references: [id], onDelete: Restrict)
+
+  @@unique([studentId, subjectId, monthId])
+  @@map("marks")
+}
