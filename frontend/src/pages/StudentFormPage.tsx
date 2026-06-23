@@ -121,21 +121,33 @@ export const StudentFormPage: React.FC = () => {
             <span className="material-symbols-outlined">dashboard</span>
             Dashboard
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-primary font-bold bg-surface-container font-label-md text-label-md active:scale-95 duration-100">
+          <button 
+            onClick={() => navigate("/")}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-primary font-bold bg-surface-container font-label-md text-label-md active:scale-95 duration-100"
+          >
             <span className="material-symbols-outlined">group</span>
             Student Management
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md active:scale-95 duration-100">
+          <button 
+            onClick={() => alert("Reports dashboard module is coming soon!")}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md active:scale-95 duration-100"
+          >
             <span className="material-symbols-outlined">assessment</span>
             Reports
           </button>
         </nav>
         <div className="mt-auto pt-4 space-y-1 border-t border-outline-variant">
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md">
+          <button 
+            onClick={() => alert("Settings module is coming soon!")}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md"
+          >
             <span className="material-symbols-outlined">settings</span>
             Settings
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md">
+          <button 
+            onClick={() => alert("Support channel is coming soon!")}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors font-label-md text-label-md"
+          >
             <span className="material-symbols-outlined">contact_support</span>
             Support
           </button>

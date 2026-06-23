@@ -153,29 +153,44 @@ export const DashboardPage: React.FC = () => {
             </div>
           </div>
           <nav className="flex flex-col gap-1">
-            <a className="flex items-center gap-3 px-4 py-3 rounded-lg text-primary bg-surface-container font-bold transition-all active:scale-95 duration-100" href="#">
+            <button 
+              onClick={() => navigate("/")}
+              className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-primary bg-surface-container font-bold transition-all active:scale-95 duration-100"
+            >
               <span className="material-symbols-outlined">dashboard</span>
               <span className="font-label-md text-label-md">Dashboard</span>
-            </a>
-            <a className="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100" href="#">
+            </button>
+            <button 
+              onClick={() => navigate("/")}
+              className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
+            >
               <span className="material-symbols-outlined">group</span>
               <span className="font-label-md text-label-md">Student Management</span>
-            </a>
-            <a className="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100" href="#">
+            </button>
+            <button 
+              onClick={() => alert("Reports dashboard module is coming soon!")}
+              className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
+            >
               <span className="material-symbols-outlined">assessment</span>
               <span className="font-label-md text-label-md">Reports</span>
-            </a>
+            </button>
           </nav>
         </div>
         <div className="mt-auto flex flex-col gap-1 border-t border-outline-variant pt-stack-md">
-          <a className="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100" href="#">
+          <button 
+            onClick={() => alert("Settings module is coming soon!")}
+            className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
+          >
             <span className="material-symbols-outlined">settings</span>
             <span className="font-label-md text-label-md">Settings</span>
-          </a>
-          <a className="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100" href="#">
+          </button>
+          <button 
+            onClick={() => alert("Support channel is coming soon!")}
+            className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all active:scale-95 duration-100"
+          >
             <span className="material-symbols-outlined">contact_support</span>
             <span className="font-label-md text-label-md">Support</span>
-          </a>
+          </button>
         </div>
       </aside>
 
