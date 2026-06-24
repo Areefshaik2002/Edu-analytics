@@ -40,6 +40,7 @@ export const DashboardPage: React.FC = () => {
     search,
     setSearch,
     isLoading,
+    error,
     successMessage,
     deleteStudent,
     clearMessages,
