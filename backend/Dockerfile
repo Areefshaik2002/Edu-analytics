@@ -19,6 +19,8 @@ COPY . .
 # Generate Prisma Client and build the TypeScript application
 RUN npx prisma generate
 RUN npm run build
+RUN npx tsc --target es2022 --module commonjs --esModuleInterop true prisma/seed.ts --outDir dist
+
 
 # Production runtime stage
 FROM node:20-alpine
