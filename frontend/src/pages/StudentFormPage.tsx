@@ -101,10 +101,10 @@ export const StudentFormPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-surface text-on-surface min-h-screen flex flex-col relative overflow-hidden">
+    <div className="bg-surface text-on-surface min-h-screen flex flex-col relative overflow-y-auto">
       
       {/* Side Navigation Bar */}
-      <aside className="fixed left-0 top-0 bottom-0 flex flex-col p-stack-md bg-surface-container-lowest border-r border-outline-variant w-[240px] z-50">
+      <aside className="fixed left-0 top-0 bottom-0 flex flex-col p-stack-md bg-surface-container-lowest border-r border-outline-variant w-[240px] z-50 hidden md:flex">
         <div className="flex items-center gap-3 px-2 mb-8">
           <div className="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
             <span className="material-symbols-outlined text-[20px]">school</span>
@@ -132,7 +132,7 @@ export const StudentFormPage: React.FC = () => {
       </aside>
 
       {/* Main Form Area Wrapper */}
-      <main className="ml-[240px] min-h-screen flex flex-col">
+      <main className="ml-0 md:ml-[240px] min-h-screen flex flex-col">
         
         {/* Top Header Bar */}
         <header className="bg-surface border-b border-outline-variant sticky top-0 z-40">
