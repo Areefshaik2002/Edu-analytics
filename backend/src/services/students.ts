@@ -1,7 +1,18 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import Fuse from "fuse.js";
 
 const prisma = new PrismaClient();
+
+type StudentWithMarks = Prisma.StudentGetPayload<{
+  include: {
+    marks: {
+      include: {
+        subject: true;
+        month: true;
+      };
+    };
+  };
+}>;
 
 export interface MarksGridInput {
   [subject: string]: {
@@ -13,16 +24,16 @@ export class StudentService {
   /**
    * Computes student subject averages from mark records.
    */
-  private static calculateAverages(student: any) {
+  private static calculateAverages(student: StudentWithMarks) {
     const subjects = ["Telugu", "Hindi", "English", "Social Studies"];
     const averages: { [key: string]: number } = {};
 
     subjects.forEach((subject) => {
       const subjectMarks = student.marks.filter(
-        (m: any) => m.subject.subjectName === subject
+        (m) => m.subject.subjectName === subject
       );
       if (subjectMarks.length > 0) {
-        const sum = subjectMarks.reduce((acc: number, curr: any) => acc + curr.marks, 0);
+        const sum = subjectMarks.reduce((acc: number, curr) => acc + curr.marks, 0);
         averages[subject] = Math.round((sum / subjectMarks.length) * 10) / 10;
       } else {
         averages[subject] = 0;

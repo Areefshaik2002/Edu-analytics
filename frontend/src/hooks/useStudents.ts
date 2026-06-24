@@ -16,9 +16,14 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
   const [selectedStudentDetail, setSelectedStudentDetail] = useState<StudentDetail | null>(null);
   const [isFormLoading, setIsFormLoading] = useState(false);
 
+  const searchRef = useRef(search);
   const lastFetched = useRef({ page: 0, search: "" });
 
-  const fetchStudents = useCallback(async (targetPage = page, query = search, force = false) => {
+  useEffect(() => {
+    searchRef.current = search;
+  }, [search]);
+
+  const fetchStudents = useCallback(async (targetPage: number, query: string, force = false) => {
     if (!force && lastFetched.current.page === targetPage && lastFetched.current.search === query) {
       return;
     }
@@ -36,12 +41,12 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, search, initialLimit]);
+  }, [initialLimit]);
 
   // Fetch when page changes
   useEffect(() => {
-    fetchStudents(page, search);
-  }, [page]);
+    fetchStudents(page, searchRef.current);
+  }, [page, fetchStudents]);
 
   // Watch search query changes (debounced)
   useEffect(() => {
@@ -50,7 +55,7 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
       fetchStudents(1, search);
     }, 300); // debounce search query
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, fetchStudents]);
 
   const loadStudentDetail = async (id: number) => {
     setIsFormLoading(true);
