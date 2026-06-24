@@ -31,13 +31,13 @@ api.interceptors.response.use(
     
     // If it's a GET request and failed due to network/server errors, retry
     if (config && config.method === "get" && (!error.response || [502, 503, 504].includes(error.response.status))) {
-      config.retry = config.retry ?? 3;
+      config.retry = config.retry ?? 6;
       config.retryCount = config.retryCount ?? 0;
       
       if (config.retryCount < config.retry) {
         config.retryCount += 1;
-        // Wait with backoff: 1.5s, 3.0s, 4.5s
-        await new Promise((resolve) => setTimeout(resolve, config.retryCount * 1500));
+        // Wait 5 seconds between retries (up to 30 seconds total) for Render spin-up
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         return api(config);
       }
     }
