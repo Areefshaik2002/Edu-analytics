@@ -1,6 +1,9 @@
 # Base image
 FROM node:20-alpine AS builder
 
+# Install OpenSSL and libc compatibility package required for Prisma
+RUN apk add --no-cache openssl libc6-compat
+
 WORKDIR /usr/src/app
 
 # Copy dependency manifests
@@ -20,7 +23,11 @@ RUN npm run build
 # Production runtime stage
 FROM node:20-alpine
 
+# Install OpenSSL and libc compatibility package required for Prisma
+RUN apk add --no-cache openssl libc6-compat
+
 WORKDIR /usr/src/app
+
 
 # Copy manifests and install only production dependencies
 COPY package*.json ./
