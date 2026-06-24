@@ -18,6 +18,7 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
 
   const searchRef = useRef(search);
   const lastFetched = useRef({ page: 0, search: "" });
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     searchRef.current = search;
@@ -50,6 +51,10 @@ export const useStudents = (initialPage = 1, initialLimit = 10) => {
 
   // Watch search query changes (debounced)
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     const timer = setTimeout(() => {
       setPage(1);
       fetchStudents(1, search);

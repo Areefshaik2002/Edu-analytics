@@ -299,6 +299,16 @@ export const DashboardPage: React.FC = () => {
                 </div>
               )}
 
+              {/* Error Notification */}
+              {error && (
+                <div className="mb-4 p-3 bg-error/10 text-error border border-error/20 rounded-lg flex justify-between items-center text-body-md">
+                  <span>{error}</span>
+                  <button onClick={clearMessages} className="hover:opacity-75">
+                    <span className="material-symbols-outlined text-[18px]">close</span>
+                  </button>
+                </div>
+              )}
+
               {/* Section Header */}
               <div className="flex justify-between items-end mb-6">
                 <div>
