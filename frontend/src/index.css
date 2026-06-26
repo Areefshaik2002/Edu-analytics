@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-on-surface overflow-hidden;
+    @apply bg-background text-on-surface;
     font-family: 'Inter', sans-serif;
   }
 }
